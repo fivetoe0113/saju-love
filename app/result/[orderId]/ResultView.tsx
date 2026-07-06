@@ -28,6 +28,46 @@ const LOADING_MESSAGES = [
 const POLL_INTERVAL_MS = 3000;
 const MESSAGE_INTERVAL_MS = 3500;
 
+function ShareButton({ nickname }: { nickname: string }) {
+  const [copied, setCopied] = useState(false);
+
+  async function handleShare() {
+    const url = window.location.href;
+    const shareData = {
+      title: "라떼여우 - 연애운 해석",
+      text: `${nickname}님의 연애운, 라떼여우가 이렇게 봐줬어요. 너도 궁금하지 않아? 🦊`,
+      url,
+    };
+
+    if (navigator.share) {
+      try {
+        await navigator.share(shareData);
+      } catch {
+        // 사용자가 공유를 취소한 경우 등 — 무시
+      }
+      return;
+    }
+
+    try {
+      await navigator.clipboard.writeText(url);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    } catch {
+      // 클립보드 접근 실패 — 조용히 무시
+    }
+  }
+
+  return (
+    <button
+      type="button"
+      onClick={handleShare}
+      className="inline-flex items-center gap-1.5 rounded-full border border-rose-soft bg-card px-4 py-2 text-[0.82rem] font-bold text-rose-deep transition hover:bg-rose-soft"
+    >
+      {copied ? "링크가 복사되었어요 ✓" : "🔗 친구에게 공유하기"}
+    </button>
+  );
+}
+
 function ChevronIcon({ open }: { open: boolean }) {
   return (
     <svg
@@ -256,6 +296,7 @@ export function ResultView({ orderId }: { orderId: string }) {
       <div className="flex flex-col items-center gap-2 text-center">
         <span className="text-[0.76rem] font-bold tracking-[0.14em] text-rose-deep">완성된 연애운</span>
         <h1 className="text-[1.5rem] font-extrabold">{nickname}님의 사주 원국</h1>
+        <ShareButton nickname={nickname} />
       </div>
 
       <div className="rounded-[20px] border border-line bg-card p-6">
@@ -319,6 +360,10 @@ export function ResultView({ orderId }: { orderId: string }) {
           여우가 마지막으로 전하는 말
         </span>
         <p className="mt-2 text-[0.96rem] font-bold leading-[1.6] text-[#6b2c3d]">{c.closingMessage}</p>
+      </div>
+
+      <div className="flex justify-center">
+        <ShareButton nickname={nickname} />
       </div>
 
       <p className="text-center text-[0.76rem] text-mist-dim">
