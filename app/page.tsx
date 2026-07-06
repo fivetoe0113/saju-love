@@ -173,6 +173,11 @@ export default function Home() {
         <p className="mx-auto mb-4 max-w-[500px] text-mist">
           본 서비스는 참고용/오락 목적으로 제공되며, 결과가 특정 사건이나 시점을 보장하지 않습니다.
         </p>
+        <p className="mb-4">
+          <Link href="/find" className="font-bold text-rose-deep underline underline-offset-2">
+            이미 결제하셨나요? 결과 다시 받아보기 →
+          </Link>
+        </p>
         <p>
           상호명 · 대표자명 · 사업자등록번호 · 통신판매업 신고번호 (추후 기재)
           <br />

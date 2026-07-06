@@ -28,7 +28,16 @@ function makeRequest(body: unknown) {
   });
 }
 
-const validBody = { nickname: "테스트", year: 1995, month: 3, day: 20, hour: 8, minute: 30, gender: "female" };
+const validBody = {
+  nickname: "테스트",
+  email: "test@example.com",
+  year: 1995,
+  month: 3,
+  day: 20,
+  hour: 8,
+  minute: 30,
+  gender: "female",
+};
 
 beforeEach(() => {
   insertedRows.length = 0;
@@ -51,6 +60,11 @@ describe("POST /api/orders", () => {
     expect(res.status).toBe(400);
   });
 
+  it("email 형식이 잘못되면 400을 반환한다", async () => {
+    const res = await POST(makeRequest({ ...validBody, email: "not-an-email" }));
+    expect(res.status).toBe(400);
+  });
+
   it("유효한 입력이면 주문을 생성하고 orderId/amount를 반환한다", async () => {
     const res = await POST(makeRequest(validBody));
     expect(res.status).toBe(200);
@@ -59,6 +73,7 @@ describe("POST /api/orders", () => {
     expect(insertedRows[0]).toMatchObject({
       amount: 2990,
       nickname: "테스트",
+      email: "test@example.com",
       birth_year: 1995,
       birth_month: 3,
       birth_day: 20,

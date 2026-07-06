@@ -75,6 +75,10 @@ vi.mock("@/lib/claude", () => ({
   generateLoveFortuneInterpretation: vi.fn(async () => mockInterpretation),
 }));
 
+vi.mock("@/lib/email", () => ({
+  sendResultReadyEmail: vi.fn(async () => {}),
+}));
+
 import { POST } from "./route";
 import { after } from "next/server";
 import { generateLoveFortuneInterpretation } from "@/lib/claude";
@@ -85,6 +89,7 @@ function makeOrder(overrides: Record<string, unknown> = {}) {
     status: "paid",
     toss_order_id: "saju-love-test",
     nickname: "테스트닉네임",
+    email: "test@example.com",
     birth_year: 1995,
     birth_month: 3,
     birth_day: 20,

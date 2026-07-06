@@ -22,6 +22,7 @@ export type OrderRow = {
   toss_order_id: string;
   amount: number;
   nickname: string;
+  email: string;
   payment_key: string | null;
   paid_at: string | null;
   birth_year: number;

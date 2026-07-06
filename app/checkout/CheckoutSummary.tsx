@@ -34,6 +34,10 @@ export function CheckoutSummary() {
           <dd className="font-bold">{input.nickname}</dd>
         </div>
         <div className="flex items-center justify-between py-4">
+          <dt className="text-[0.86rem] text-mist">이메일</dt>
+          <dd className="font-bold">{input.email}</dd>
+        </div>
+        <div className="flex items-center justify-between py-4">
           <dt className="text-[0.86rem] text-mist">생년월일</dt>
           <dd className="font-bold tabular-nums">
             {input.year}.{String(input.month).padStart(2, "0")}.{String(input.day).padStart(2, "0")}

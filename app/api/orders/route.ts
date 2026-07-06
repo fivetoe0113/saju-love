@@ -5,6 +5,7 @@ const PRICE = 2990;
 
 type CreateOrderBody = {
   nickname: string;
+  email: string;
   year: number;
   month: number;
   day: number;
@@ -13,6 +14,8 @@ type CreateOrderBody = {
   gender: "male" | "female";
 };
 
+const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
 function isValidBody(body: unknown): body is CreateOrderBody {
   if (!body || typeof body !== "object") return false;
   const b = body as Record<string, unknown>;
@@ -20,6 +23,8 @@ function isValidBody(body: unknown): body is CreateOrderBody {
     typeof b.nickname === "string" &&
     b.nickname.trim().length > 0 &&
     b.nickname.length <= 20 &&
+    typeof b.email === "string" &&
+    EMAIL_RE.test(b.email.trim()) &&
     Number.isInteger(b.year) &&
     Number.isInteger(b.month) &&
     Number.isInteger(b.day) &&
@@ -44,6 +49,7 @@ export async function POST(request: NextRequest) {
       toss_order_id: tossOrderId,
       amount: PRICE,
       nickname: body.nickname.trim(),
+      email: body.email.trim().toLowerCase(),
       birth_year: body.year,
       birth_month: body.month,
       birth_day: body.day,

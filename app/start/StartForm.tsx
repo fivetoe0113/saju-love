@@ -14,6 +14,8 @@ function daysInMonth(year: number, month: number): number {
   return new Date(Date.UTC(year, month, 0)).getUTCDate();
 }
 
+const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
 function SelectField({
   label,
   value,
@@ -47,6 +49,7 @@ function SelectField({
 export function StartForm() {
   const router = useRouter();
   const [nickname, setNickname] = useState("");
+  const [email, setEmail] = useState("");
   const [year, setYear] = useState("");
   const [month, setMonth] = useState("");
   const [day, setDay] = useState("");
@@ -69,6 +72,10 @@ export function StartForm() {
       setError("이름 또는 닉네임을 입력해주세요.");
       return;
     }
+    if (!EMAIL_RE.test(email.trim())) {
+      setError("결과를 보내드릴 이메일 주소를 정확히 입력해주세요.");
+      return;
+    }
     if (!year || !month || !day || !hour || !minute || !gender) {
       setError("생년월일, 태어난 시간, 성별을 모두 선택해주세요.");
       return;
@@ -81,6 +88,7 @@ export function StartForm() {
 
     const payload = {
       nickname: nickname.trim(),
+      email: email.trim().toLowerCase(),
       year: Number(year),
       month: Number(month),
       day: Number(day),
@@ -107,6 +115,23 @@ export function StartForm() {
           placeholder="해석에서 이렇게 불러드릴게요"
           className="rounded-xl border border-line bg-card px-4 py-3 text-[1rem] outline-none focus-visible:border-rose focus-visible:ring-2 focus-visible:ring-rose-soft"
         />
+      </div>
+
+      <div className="flex flex-col gap-2">
+        <label htmlFor="email" className="text-[0.88rem] font-bold">
+          이메일 주소
+        </label>
+        <input
+          id="email"
+          type="email"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          placeholder="결과 링크를 보내드려요"
+          className="rounded-xl border border-line bg-card px-4 py-3 text-[1rem] outline-none focus-visible:border-rose focus-visible:ring-2 focus-visible:ring-rose-soft"
+        />
+        <span className="text-[0.8rem] text-mist">
+          결과가 완성되면 이 주소로 링크를 보내드려요. 나중에 이 이메일로 다시 조회할 수도 있어요.
+        </span>
       </div>
 
       <div className="flex flex-col gap-2">
@@ -168,8 +193,8 @@ export function StartForm() {
           className="mt-0.5 h-4 w-4 accent-rose"
         />
         <span>
-          이름(닉네임)·생년월일시·성별 개인정보 수집 및 이용에 동의합니다. 입력하신 정보는 연애운 해석
-          목적으로만 사용됩니다.
+          이름(닉네임)·이메일·생년월일시·성별 개인정보 수집 및 이용에 동의합니다. 입력하신 정보는 연애운 해석
+          결과 제공 목적으로만 사용됩니다.
         </span>
       </label>
 

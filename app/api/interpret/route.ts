@@ -3,6 +3,7 @@ import { after } from "next/server";
 import { createSupabaseAdminClient, type OrderRow } from "@/lib/supabase";
 import { calculateSaju, calculateYearOutlook } from "@/lib/manseryeok";
 import { generateLoveFortuneInterpretation, type LoveFortuneContent } from "@/lib/claude";
+import { sendResultReadyEmail } from "@/lib/email";
 
 // 분량이 대폭 늘어나 생성 시간이 더 길어질 수 있어 여유를 둠
 export const maxDuration = 240;
@@ -59,6 +60,12 @@ async function runGeneration(order: OrderRow) {
         interpreted_at: new Date().toISOString(),
       })
       .eq("id", order.id);
+
+    if (order.email) {
+      await sendResultReadyEmail(order.email, order.toss_order_id, order.nickname).catch((emailErr) => {
+        console.error("결과 완료 이메일 발송 실패:", emailErr);
+      });
+    }
   } catch (err) {
     console.error("AI 해석 생성 실패:", err);
     await supabase.from("orders").update({ status: "paid" }).eq("id", order.id);
