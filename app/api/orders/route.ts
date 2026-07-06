@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { createSupabaseAdminClient } from "@/lib/supabase";
 
-const PRICE = 2990;
+const PRICE = 2900;
 
 type CreateOrderBody = {
   nickname: string;

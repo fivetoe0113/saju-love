@@ -31,7 +31,7 @@ function makeRequest(body: unknown) {
 }
 
 beforeEach(() => {
-  mockOrder = { id: "order-uuid", amount: 2990, status: "pending" };
+  mockOrder = { id: "order-uuid", amount: 2900, status: "pending" };
   updatePatches.length = 0;
   vi.unstubAllGlobals();
   process.env.TOSS_SECRET_KEY = "test_sk_dummy";
@@ -40,7 +40,7 @@ beforeEach(() => {
 describe("POST /api/payment/confirm", () => {
   it("주문을 찾지 못하면 404를 반환한다", async () => {
     mockOrder = null;
-    const res = await POST(makeRequest({ paymentKey: "pk", orderId: "x", amount: 2990 }));
+    const res = await POST(makeRequest({ paymentKey: "pk", orderId: "x", amount: 2900 }));
     expect(res.status).toBe(404);
   });
 
@@ -53,10 +53,10 @@ describe("POST /api/payment/confirm", () => {
   });
 
   it("이미 결제완료된 주문은 토스 API 없이 성공 응답을 준다", async () => {
-    mockOrder = { id: "order-uuid", amount: 2990, status: "paid" };
+    mockOrder = { id: "order-uuid", amount: 2900, status: "paid" };
     const fetchMock = vi.fn();
     vi.stubGlobal("fetch", fetchMock);
-    const res = await POST(makeRequest({ paymentKey: "pk", orderId: "x", amount: 2990 }));
+    const res = await POST(makeRequest({ paymentKey: "pk", orderId: "x", amount: 2900 }));
     expect(res.status).toBe(200);
     expect(fetchMock).not.toHaveBeenCalled();
   });
@@ -66,7 +66,7 @@ describe("POST /api/payment/confirm", () => {
       "fetch",
       vi.fn(async () => ({ ok: true, json: async () => ({}) }))
     );
-    const res = await POST(makeRequest({ paymentKey: "pk", orderId: "x", amount: 2990 }));
+    const res = await POST(makeRequest({ paymentKey: "pk", orderId: "x", amount: 2900 }));
     expect(res.status).toBe(200);
     expect(updatePatches[0]).toMatchObject({ status: "paid", payment_key: "pk" });
   });
@@ -79,7 +79,7 @@ describe("POST /api/payment/confirm", () => {
         json: async () => ({ code: "REJECT_CARD_COMPANY", message: "카드사 거절" }),
       }))
     );
-    const res = await POST(makeRequest({ paymentKey: "pk", orderId: "x", amount: 2990 }));
+    const res = await POST(makeRequest({ paymentKey: "pk", orderId: "x", amount: 2900 }));
     expect(res.status).toBe(502);
     expect(updatePatches[0]).toMatchObject({ status: "failed" });
   });

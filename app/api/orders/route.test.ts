@@ -41,7 +41,7 @@ const validBody = {
 
 beforeEach(() => {
   insertedRows.length = 0;
-  insertResult = { data: { id: "uuid-1", toss_order_id: "saju-love-abc", amount: 2990 }, error: null };
+  insertResult = { data: { id: "uuid-1", toss_order_id: "saju-love-abc", amount: 2900 }, error: null };
 });
 
 describe("POST /api/orders", () => {
@@ -69,9 +69,9 @@ describe("POST /api/orders", () => {
     const res = await POST(makeRequest(validBody));
     expect(res.status).toBe(200);
     const json = await res.json();
-    expect(json).toEqual({ orderId: "saju-love-abc", amount: 2990 });
+    expect(json).toEqual({ orderId: "saju-love-abc", amount: 2900 });
     expect(insertedRows[0]).toMatchObject({
-      amount: 2990,
+      amount: 2900,
       nickname: "테스트",
       email: "test@example.com",
       birth_year: 1995,

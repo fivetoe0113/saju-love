@@ -23,7 +23,7 @@ export default function Home() {
             생년월일시로 만세력을 정확히 계산하고, 라떼여우가 당신의 연애운과 결혼 시기를 살짝 귀띔해드려요.
           </p>
           <div className="mt-5 inline-flex items-baseline gap-1.5 rounded-full bg-ink px-4.5 py-2 text-[0.82rem] font-bold text-paper">
-            ☕ 라떼 한 잔 값 <b className="text-[1rem] text-rose-soft tabular-nums">2,990원</b>
+            ☕ 라떼 한 잔 값 <b className="text-[1rem] text-rose-soft tabular-nums">2,900원</b>
           </div>
           <Link
             href="/start"
@@ -154,7 +154,7 @@ export default function Home() {
           <div className="flex flex-col items-center gap-3.5 rounded-3xl bg-ink px-6 py-11 text-center text-paper sm:px-13">
             <span className="text-[0.86rem] text-rose-soft">아메리카노 두 잔보다 저렴하게</span>
             <div className="font-serif text-[clamp(2.6rem,7vw,3.4rem)] tabular-nums">
-              2,990<sup className="ml-1.5 text-[1rem] font-normal text-mist-dim">원</sup>
+              2,900<sup className="ml-1.5 text-[1rem] font-normal text-mist-dim">원</sup>
             </div>
             <p className="max-w-[360px] text-[0.9rem] text-[#d9c4c9]">
               구독 없이 필요할 때 한 번만 결제해요. 결제 후 바로 결과를 확인할 수 있어요.

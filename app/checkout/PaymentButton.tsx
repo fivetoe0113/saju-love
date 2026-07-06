@@ -65,7 +65,7 @@ export function PaymentButton({ input }: { input: OrderInput }) {
         disabled={loading || !sdkReady}
         className="inline-flex items-center justify-center gap-2 rounded-full bg-rose px-9 py-4 text-[1rem] font-extrabold text-white shadow-[0_14px_28px_-12px_rgba(232,84,122,0.55)] transition hover:-translate-y-0.5 hover:shadow-[0_18px_32px_-10px_rgba(232,84,122,0.6)] disabled:opacity-60 disabled:hover:translate-y-0"
       >
-        {loading ? "결제 준비 중..." : "결제하고 결과 보기 (2,990원)"}
+        {loading ? "결제 준비 중..." : "결제하고 결과 보기 (2,900원)"}
       </button>
     </div>
   );
