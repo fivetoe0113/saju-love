@@ -74,6 +74,7 @@ describe("POST /api/orders", () => {
       amount: 2900,
       nickname: "테스트",
       email: "test@example.com",
+      source: "direct",
       birth_year: 1995,
       birth_month: 3,
       birth_day: 20,
@@ -81,6 +82,14 @@ describe("POST /api/orders", () => {
       birth_minute: 30,
       gender: "female",
     });
+  });
+
+  it("source가 share이면 그대로 저장하고, 잘못된 값이면 direct로 저장한다", async () => {
+    await POST(makeRequest({ ...validBody, source: "share" }));
+    expect(insertedRows[0]).toMatchObject({ source: "share" });
+
+    await POST(makeRequest({ ...validBody, source: "무언가이상한값" }));
+    expect(insertedRows[1]).toMatchObject({ source: "direct" });
   });
 
   it("DB 저장에 실패하면 500을 반환한다", async () => {

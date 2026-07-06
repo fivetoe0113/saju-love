@@ -1,6 +1,8 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import Link from "next/link";
+import { track } from "@vercel/analytics";
 import { FoxMark } from "@/components/FoxMark";
 import type { SajuResult } from "@/lib/manseryeok";
 import type { LoveFortuneContent } from "@/lib/claude";
@@ -28,15 +30,18 @@ const LOADING_MESSAGES = [
 const POLL_INTERVAL_MS = 3000;
 const MESSAGE_INTERVAL_MS = 3500;
 
-function ShareButton({ nickname }: { nickname: string }) {
+function ShareButton({ nickname, orderId }: { nickname: string; orderId: string }) {
   const [copied, setCopied] = useState(false);
 
   async function handleShare() {
-    const url = window.location.href;
+    track("share_click", { orderId });
+
+    const url = new URL(window.location.href);
+    url.searchParams.set("ref", "share");
     const shareData = {
       title: "라떼여우 - 연애운 해석",
       text: `${nickname}님의 연애운, 라떼여우가 이렇게 봐줬어요. 너도 궁금하지 않아? 🦊`,
-      url,
+      url: url.toString(),
     };
 
     if (navigator.share) {
@@ -49,7 +54,7 @@ function ShareButton({ nickname }: { nickname: string }) {
     }
 
     try {
-      await navigator.clipboard.writeText(url);
+      await navigator.clipboard.writeText(url.toString());
       setCopied(true);
       setTimeout(() => setCopied(false), 2000);
     } catch {
@@ -228,6 +233,12 @@ export function ResultView({ orderId }: { orderId: string }) {
   }
 
   useEffect(() => {
+    if (new URLSearchParams(window.location.search).get("ref") === "share") {
+      track("referral_visit", { orderId });
+    }
+  }, [orderId]);
+
+  useEffect(() => {
     let cancelled = false;
 
     async function poll() {
@@ -296,7 +307,7 @@ export function ResultView({ orderId }: { orderId: string }) {
       <div className="flex flex-col items-center gap-2 text-center">
         <span className="text-[0.76rem] font-bold tracking-[0.14em] text-rose-deep">완성된 연애운</span>
         <h1 className="text-[1.5rem] font-extrabold">{nickname}님의 사주 원국</h1>
-        <ShareButton nickname={nickname} />
+        <ShareButton nickname={nickname} orderId={orderId} />
       </div>
 
       <div className="rounded-[20px] border border-line bg-card p-6">
@@ -363,7 +374,18 @@ export function ResultView({ orderId }: { orderId: string }) {
       </div>
 
       <div className="flex justify-center">
-        <ShareButton nickname={nickname} />
+        <ShareButton nickname={nickname} orderId={orderId} />
+      </div>
+
+      <div className="rounded-2xl border border-line bg-card p-5 text-center">
+        <p className="text-[0.9rem] font-bold">이 링크를 보고 왔다면, 너의 연애운도 궁금하지 않아?</p>
+        <Link
+          href="/start?ref=share"
+          onClick={() => track("referral_cta_click", { orderId })}
+          className="mt-3 inline-flex items-center justify-center rounded-full bg-rose px-7 py-3 text-[0.9rem] font-extrabold text-white transition hover:-translate-y-0.5"
+        >
+          나도 라떼여우로 확인하기
+        </Link>
       </div>
 
       <p className="text-center text-[0.76rem] text-mist-dim">

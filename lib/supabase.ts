@@ -23,6 +23,7 @@ export type OrderRow = {
   amount: number;
   nickname: string;
   email: string;
+  source: "direct" | "share";
   payment_key: string | null;
   paid_at: string | null;
   birth_year: number;

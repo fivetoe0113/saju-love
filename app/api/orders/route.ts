@@ -16,6 +16,10 @@ type CreateOrderBody = {
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
+function normalizeSource(value: unknown): "direct" | "share" {
+  return value === "share" ? "share" : "direct";
+}
+
 function isValidBody(body: unknown): body is CreateOrderBody {
   if (!body || typeof body !== "object") return false;
   const b = body as Record<string, unknown>;
@@ -50,6 +54,7 @@ export async function POST(request: NextRequest) {
       amount: PRICE,
       nickname: body.nickname.trim(),
       email: body.email.trim().toLowerCase(),
+      source: normalizeSource((body as Record<string, unknown>).source),
       birth_year: body.year,
       birth_month: body.month,
       birth_day: body.day,

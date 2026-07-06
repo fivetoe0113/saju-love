@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { Suspense } from "react";
 import { FoxMark } from "@/components/FoxMark";
 import { StartForm } from "./StartForm";
 
@@ -19,7 +20,9 @@ export default function StartPage() {
           <p className="text-[0.9rem] text-mist">입력 1분이면 사주 계산이 끝나요.</p>
         </div>
 
-        <StartForm />
+        <Suspense fallback={null}>
+          <StartForm />
+        </Suspense>
       </div>
     </div>
   );

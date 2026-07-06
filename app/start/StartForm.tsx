@@ -1,6 +1,6 @@
 "use client";
 
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { useMemo, useState, type FormEvent } from "react";
 import type { Gender } from "@/lib/manseryeok";
 
@@ -48,6 +48,8 @@ function SelectField({
 
 export function StartForm() {
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const source = searchParams.get("ref") === "share" ? "share" : "direct";
   const [nickname, setNickname] = useState("");
   const [email, setEmail] = useState("");
   const [year, setYear] = useState("");
@@ -89,6 +91,7 @@ export function StartForm() {
     const payload = {
       nickname: nickname.trim(),
       email: email.trim().toLowerCase(),
+      source,
       year: Number(year),
       month: Number(month),
       day: Number(day),
